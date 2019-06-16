@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io//favicon.ico?v=1560670971953">
+<link rel="shortcut icon" href="https://xiaofine.github.io//favicon.ico?v=1560671159611">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io//styles/main.css">
 
@@ -29,7 +29,7 @@
   <div class="site-header">
     <div class="left">
       <a href="https://xiaofine.github.io/">
-        <img class="avatar" src="https://xiaofine.github.io//images/avatar.png?v=1560670971953" alt="" width="32px" height="32px">
+        <img class="avatar" src="https://xiaofine.github.io//images/avatar.png?v=1560671159611" alt="" width="32px" height="32px">
       </a>
       <a href="https://xiaofine.github.io/">
         <h1 class="site-title">Gridea</h1>
@@ -81,6 +81,23 @@
         
 <section class="post-item">
     <div class="content">
+      <a href="https://xiaofine.github.io//post/spark-submit-add-jar">
+        <h2 class="post-title">Spark Submit中添加多个jar</h2>
+      </a>
+      <div class="post-abstract">
+        <p>这次项目需要利用spark读取hbase，但在提交spark任务之后发现该集群没有为spark配置hbase相关的依赖，同时我们没有权限修改集群配置，因此只能通过spark submit时添加<code>--jar</code>参数来指定依赖。</p>
+
+      </div>
+      <div class="post-info">
+        <span><i class="icon icon-calendar-outline"></i> 2019-03-24</span>
+        
+      </div>
+    </div>
+    
+  </section>
+
+<section class="post-item">
+    <div class="content">
       <a href="https://xiaofine.github.io//post/hello-gridea">
         <h2 class="post-title">Hello Gridea</h2>
       </a>
@@ -109,6 +126,56 @@
         <div class="feature-container" style="background-image: url('https://xiaofine.github.io//post-images/hello-gridea.png')">
         </div>
       </a>
+    
+  </section>
+
+<section class="post-item">
+    <div class="content">
+      <a href="https://xiaofine.github.io//post/Yarn">
+        <h2 class="post-title">Yarn</h2>
+      </a>
+      <div class="post-abstract">
+        <h4 id="yarn-mrv1">Yarn MRv1</h4>
+<p>Hadoop的MapReduce原有架构主要由以下几个组件组成：Client、JobTracker、TaskTracker、Task。其架构图如下所示：
+{%asset_img 20170808210130242.png%}
+从上图中可以清楚的看出原 MapReduce 程序的流程及设计思路：</p>
+<ol>
+<li>首先用户程序 (JobClient) 提交了一个 job，job 的信息会发送到 <strong>Job Tracker</strong> 中，Job Tracker 是 Map-reduce 框架的中心，他需要与集群中的机器定时通信 (heartbeat), 需要管理哪些程序应该跑在哪些机器上，需要管理所有 job 失败、重启等操作。</li>
+<li><strong>TaskTracker</strong> 是 Map-reduce 集群中每台机器都有的一个部分，他做的事情主要是监视自己所在机器的资源情况。</li>
+<li>TaskTracker 同时监视当前机器的 tasks 运行状况。TaskTracker 需要把这些信息通过 heartbeat 发送给 JobTracker，JobTracker 会搜集这些信息以给新提交的 job 分配运行在哪些机器上。上图虚线箭头就是表示消息的发送 - 接收的过程。</li>
+</ol>
+
+      </div>
+      <div class="post-info">
+        <span><i class="icon icon-calendar-outline"></i> 2018-03-20</span>
+        
+      </div>
+    </div>
+    
+  </section>
+
+<section class="post-item">
+    <div class="content">
+      <a href="https://xiaofine.github.io//post/初始Hadoop">
+        <h2 class="post-title">初始Hadoop</h2>
+      </a>
+      <div class="post-abstract">
+        <h3 id="hadoop简介">Hadoop简介</h3>
+<p>Hadoop是一个于2011年，由Apache基金会所开发的分布式系统基础架构。它为我们提供了一个可靠的，可扩展的分布式计算框架。总的来说，Hadoop由四部分组成，包括:</p>
+<ol>
+<li>分布式计算框架MapReduce</li>
+<li>分布式文件系统HDFS</li>
+<li>作业调度和资源管理服务YARN</li>
+<li>用于支持外部组件的公用调用服务Hadoop Common</li>
+</ol>
+<p>本文主要就前三部分进行总结。</p>
+
+      </div>
+      <div class="post-info">
+        <span><i class="icon icon-calendar-outline"></i> 2018-03-16</span>
+        
+      </div>
+    </div>
     
   </section>
 

@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Yarn | Gridea</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://xiaofine.github.io//favicon.ico?v=1560671159611">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://xiaofine.github.io//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xiaofine.github.io/">
+        <img class="avatar" src="https://xiaofine.github.io//images/avatar.png?v=1560671159611" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xiaofine.github.io/">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Yarn</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2018-03-20</span>
+            
+          </div>
+          <div class="post-content">
+            <h4 id="yarn-mrv1">Yarn MRv1</h4>
+<p>Hadoop的MapReduce原有架构主要由以下几个组件组成：Client、JobTracker、TaskTracker、Task。其架构图如下所示：
+{%asset_img 20170808210130242.png%}
+从上图中可以清楚的看出原 MapReduce 程序的流程及设计思路：</p>
+<ol>
+<li>首先用户程序 (JobClient) 提交了一个 job，job 的信息会发送到 <strong>Job Tracker</strong> 中，Job Tracker 是 Map-reduce 框架的中心，他需要与集群中的机器定时通信 (heartbeat), 需要管理哪些程序应该跑在哪些机器上，需要管理所有 job 失败、重启等操作。</li>
+<li><strong>TaskTracker</strong> 是 Map-reduce 集群中每台机器都有的一个部分，他做的事情主要是监视自己所在机器的资源情况。</li>
+<li>TaskTracker 同时监视当前机器的 tasks 运行状况。TaskTracker 需要把这些信息通过 heartbeat 发送给 JobTracker，JobTracker 会搜集这些信息以给新提交的 job 分配运行在哪些机器上。上图虚线箭头就是表示消息的发送 - 接收的过程。</li>
+</ol>
+<!--more-->
+<p>可以看得出原来的 map-reduce 架构是简单明了的，在最初推出的几年，也得到了众多的成功案例，获得业界广泛的支持和肯定，但随着分布式系统集群的规模和其工作负荷的增长，原框架的问题逐渐浮出水面，主要的问题集中如下：</p>
+<ol>
+<li>JobTracker 是 Map-reduce 的集中处理点，存在 <strong>单点故障</strong>。</li>
+<li>JobTracker 完成了太多的任务，造成了 <strong>过多的资源消耗</strong>，当 map-reduce job 非常多的时候，会造成很大的内存开销，潜在来说，也增加了 JobTracker fail 的风险，这也是业界普遍总结出老 Hadoop 的 Map-Reduce 只能支持 4000 节点主机的上限。</li>
+<li>在 TaskTracker 端，以 map/reduce task 的数目作为资源的表示过于简单，没有考虑到 cpu/ 内存的占用情况，如果两个大内存消耗的 task 被调度到了一块，很容易出现 OOM。</li>
+<li>在 TaskTracker 端，把资源强制划分为 map task slot 和 reduce task slot, 如果当系统中只有 map task 或者只有 reduce task 的时候，会造成资源的浪费，也就是前面提过的集群资源利用的问题。</li>
+<li>源代码层面分析的时候，会发现代码非常的难读，常常因为一个 class 做了太多的事情，代码量达 3000 多行，，造成 class 的任务不清晰，增加 bug 修复和版本维护的难度。</li>
+<li>从操作的角度来看，现在的 Hadoop MapReduce 框架在有任何重要的或者不重要的变化 ( 例如 bug 修复，性能提升和特性化 ) 时，都会强制进行系统级别的升级更新。更糟的是，它不管用户的喜好，强制让分布式集群系统的每一个用户端同时更新。这些更新会让用户为了验证他们之前的应用程序是不是适用新的 Hadoop 版本而浪费大量时间。</li>
+</ol>
+<h4 id="yarn">Yarn</h4>
+<p>Yarn是Hadoop 2.0以后引入的资源管理系统，它通过资源的动态申请，让Hadoop集群的资源分配变得更加的细致，避免资源浪费（Hadoop 2.0以前map和reducer执行内存是固定的）。Hadoop Yarn一共有三个组成部分：</p>
+<ol>
+<li>一个ResourceManager：主管整个集群资源的管理和分配；任务调度</li>
+<li>各个节点上的NodeManager：主管一个节点的资源情况，比如cpu，内存</li>
+<li>对应一个应用的ApplicationMaster：负责监管某个应用（也就是一个job），以及任务的失败重启
+下面是Yarn的框架图：
+{%asset_img 微信图片_20180725162408.jpg%}
+图中有两个client，分别启动了两个applications（看颜色）。一个任务的具体执行者是一个或者多个container，client和container（或者说任务的执行）之间是通过ResourceManager来联系起来的。而ResourceManager通过与Nodemanager的通信，获取每个节点的资源情况，进而掌握整个集群的资源情况。client直接向ResourceManager提交application，而不和具体的worker节点通信。则ResourceManager首先会启动一个applicationmaster，然后该applicationmaster再向resourcemanager申请计算资源，以在更多的节点上开启container进行计算任务。同时，还可以看出，container会向applicationmaster汇报任务的进展情况。</li>
+</ol>
+<p>具体来说：</p>
+<ol>
+<li>ResourceManager由两部分组成。用于调度集群里Container的Scheduler 和用于响应client的作业请求，监管applicationmasters的applicationmanager（是的，名字很绕）。在Hadoop中实现的调度器主要有Capacity Scheduler和Fair Scheduler（具体请百度）</li>
+<li>container是具体的执行引擎，计算任务就是跑在它里面。一个application会对于一个或多个container，一个节点上也可以运行多个container。不过container也是一个计算资源（cpu，内存）的抽象封装
+NodeManager掌管节点的cpu，内存，网络等等资源，同时会把这些信息告诉给ResourceManager，以便做资源统计和任务调度</li>
+</ol>
+<p>以下面的作业提交流程图为例，看看能不能说得更明白
+{%asset_img 微信图片_20180725162914.jpg%}</p>
+<ol>
+<li>用户通过job.waitForCompletion 方法提交作业</li>
+<li>首先会与ResourceManager（Applicationmanager）通信，ResourceManager检测application的输入输出设置，作业的输入分片是否能够计算等等，如果有任何问题，将会返回错误信息给client</li>
+<li>第二步通过之后，便开始上传用户代码jar包和相关文件到HDFS。这一步表明hadoop确实是data-distributed，而不是model-distributed</li>
+<li>提交作业</li>
+<li>此时applicationmanager会在一个节点上启动一个container（也就是申请的一些资源），然后在上面运行一个applicationmaster。这个applicationmaster会在applicationmanager上进行注册，并且applicationmanager会监管这个applicationmaster，一旦挂了，就重启他</li>
+<li>然后applicationmaster开始初始化application，包括创建HDFS目录，生成InputSplit分片信息，获取application的id等等</li>
+<li>这一步就是根据具体的inputsplit的要求，用于读取输入数据</li>
+<li>然后applicationmaster向resourcemanager以及nodemanager申请更多的计算资源（container），以准备运行application</li>
+<li>Nodemanager就根据要求，在这些计算资源（container）上，开个子进程，开始执行MapReduce任务，并汇报任务状态给applicationmaster，一旦有container挂了，就重启。等application执行结束，applicationmaster就向applicationmanager注销，释放资源</li>
+</ol>
+<blockquote>
+<p>Yarn的另一个目标就是拓展Hadoop，使得它不仅仅可以支持MapReduce计算，还能很方便的管理诸如Hive、Hbase、Pig、Spark/Shark等应用。这种新的架构设计能够使得各种类型的应用运行在Hadoop上面，并通过Yarn从系统层面进行统一的管理，也就是说，有了Yarn，各种应用就可以互不干扰的运行在同一个Hadoop系统中，共享整个集群资源，如下图所示
+{%asset_img 微信图片_20180725163557.jpg%}</p>
+</blockquote>
+<p>#####Yarn的优势
+Yarn 框架相对于老的 MapReduce 框架什么优势呢？我们可以看到：</p>
+<ol>
+<li>这个设计大大减小了 JobTracker（也就是现在的 ResourceManager）的资源消耗，并且让监测每一个 Job 子任务 (tasks) 状态的程序分布式化了，更安全、更优美。</li>
+<li>在新的 Yarn 中，ApplicationMaster 是一个可变更的部分，用户可以对不同的编程模型写自己的 AppMst，让更多类型的编程模型能够跑在 Hadoop 集群中，可以参考 hadoop Yarn 官方配置模板中的 mapred-site.xml 配置。</li>
+<li>对于资源的表示以内存为单位 ( 在目前版本的 Yarn 中，没有考虑 cpu 的占用 )，比之前以剩余 slot 数目更合理。</li>
+<li>老的框架中，JobTracker 一个很大的负担就是监控 job 下的 tasks 的运行状况，现在，这个部分就扔给 ApplicationMaster 做了，而 ResourceManager 中有一个模块叫做 ApplicationsMasters( 注意不是 ApplicationMaster)，它是监测 ApplicationMaster 的运行状况，如果出问题，会将其在其他机器上重启。</li>
+<li>Container 是 Yarn 为了将来作资源隔离而提出的一个框架。这一点应该借鉴了 Mesos 的工作，目前是一个框架，仅仅提供 java 虚拟机内存的隔离 ,hadoop 团队的设计思路应该后续能支持更多的资源调度和控制 , 既然资源表示成内存量，那就没有了之前的 map slot/reduce slot 分开造成集群资源闲置的尴尬情况。</li>
+</ol>
+<p>####Spark on Yarn
+Spark支持在Yarn上运行，其分为Yarn-cluster模式和Yarn-client模式。</p>
+<blockquote>
+<p>Spark支持可插拔的集群管理模式(Standalone、Mesos以及YARN)，集群管理负责启动executor进程，编写Spark application的人根本不需要知道Spark用的是什么集群管理。</p>
+</blockquote>
+<p>Spark支持的三种集群模式，这三种集群模式都由两个组件组成:master和slave。Master服务(<strong>YARN ResourceManager</strong>,Mesos master和Spark standalone master)决定哪些application可以运行，什么时候运行以及哪里去运行。而slave服务( <strong>YARN NodeManager</strong>, Mesos slave和Spark standalone slave)实际上运行executor进程。
+当在YARN上运行Spark作业，每个Spark executor作为一个YARN容器(container)运行。Spark可以使得多个Tasks在同一个容器(container)里面运行。这是个很大的优点。</p>
+<blockquote>
+<p>注意这里和Hadoop的MapReduce作业不一样，MapReduce作业为每个Task开启不同的JVM来运行。虽然说MapReduce可以通过参数来配置。详见mapreduce.job.jvm.numtasks。关于这个参数的介绍已经超过本篇文章的介绍。</p>
+</blockquote>
+<p>从广义上讲，<strong>yarn-cluster适用于生产环境</strong>；而 <strong>yarn-client适用于交互和调试</strong>，也就是希望快速地看到application的输出。</p>
+<blockquote>
+<p>在我们介绍yarn-cluster和yarn-client的深层次的区别之前，我们先明白一个概念：Application Master。在YARN中，每个Application实例都有一个Application Master进程，它是Application启动的第一个容器。它负责和ResourceManager打交道，并请求资源。获取资源之后告诉NodeManager为其启动container。</p>
+</blockquote>
+<p>从深层次的含义讲，yarn-cluster和yarn-client模式的区别其实就是Application Master进程的区别，yarn-cluster模式下，driver运行在AM(Application Master)中，它负责向YARN申请资源，并监督作业的运行状况。当用户提交了作业之后，就可以关掉Client，作业会继续在YARN上运行。然而yarn-cluster模式不适合运行交互类型的作业。而yarn-client模式下，Application Master仅仅向YARN请求executor，client会和请求的container通信来调度他们工作，也就是说Client不能离开。看下下面的两幅图应该会明白（上图是yarn-cluster模式，下图是yarn-client模式）：
+{%asset_img calxf/Desktop/Hadoop/img/spark-yarn-f31.png%}
+{%asset_img spark-yarn-f22.png%}</p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://xiaofine.github.io//post/初始Hadoop">
+              <h3 class="post-title">
+                下一篇：初始Hadoop
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://xiaofine.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

@@ -5,7 +5,7 @@
     
 <meta charset="utf-8" >
 
-<title>Hello Gridea | Gridea</title>
+<title>Spark Submit中添加多个jar | Gridea</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -80,55 +80,39 @@
       <div class="content-container">
         <div class="post-detail">
           
-            <div class="feature-container" style="background-image: url('https://xiaofine.github.io//post-images/hello-gridea.png')">
-            </div>
-          
-          <h2 class="post-title">Hello Gridea</h2>
+          <h2 class="post-title">Spark Submit中添加多个jar</h2>
           <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2018-12-12</span>
-            
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="https://xiaofine.github.io//tag/gridea">
-                    Gridea
-                    
-                  </a>
-                
-              </span>
+            <span><i class="icon-calendar-outline"></i> 2019-03-24</span>
             
           </div>
           <div class="post-content">
-            <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="http://hvenotes.fehey.com/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>𝖶𝗂𝗇𝖽𝗈𝗐𝗌</strong> 或 <strong>𝖬𝖺𝖼𝖮𝖲</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+            <p>这次项目需要利用spark读取hbase，但在提交spark任务之后发现该集群没有为spark配置hbase相关的依赖，同时我们没有权限修改集群配置，因此只能通过spark submit时添加<code>--jar</code>参数来指定依赖。</p>
+<!--more-->
+<h4 id="遇到的问题">遇到的问题</h4>
+<p>Spark在提交任务时，可以通过--jar参数来添加依赖包，当有个多个jar包时，则以逗号间隔。我们希望<code>--jar</code>参数包含hbase库目录下的所有依赖包，即以<code>--jar /hbase/lib/*.jar</code>的方式进行指定，发现总是会报找不到主类的错误。经过排查发现，<code>lib/*.jar</code>会报目录下的所有jar包以<strong>空格</strong>间隔，导致spark submit命令的参数出现偏倚而无法发现主类。</p>
+<h4 id="简单的解决方法">简单的解决方法</h4>
+<p>将spark命令修改为</p>
+<pre><code>--jar $(echo hbase/lib/*.jar | tr ' ' ',')
+</code></pre>
+<p><code>tr</code>命令能够将后两个字符集进行替换操作，也因此在处理文件名包含空格的jar包时会出错。</p>
+<h4 id="更好的解决方法">更好的解决方法</h4>
+<pre><code>--jar $(files=(hbase/lib/*.jar); IFS=,; echo &quot;${files[*]}&quot;)
+</code></pre>
+<p><code>IFS</code>是域内间隔符(internal field separator)，这里设置为<code>,</code>。</p>
+<h5 id="参考资料">参考资料</h5>
+<ol>
+<li><a href="http://www.learn4master.com/big-data/spark/spark-submit-multiple-jars">spark submit multiple jars</a></li>
+<li><a href="https://stackoverflow.com/questions/4729863/using-bash-how-do-you-make-a-classpath-out-of-all-files-in-a-directory/4729899#4729899">Stackoverflow:Using bash, how do you make a classpath out of all files in a directory?</a></li>
+</ol>
 
           </div>
         </div>
 
         
           <div class="next-post">
-            <a class="purple-link" href="https://xiaofine.github.io//post/Yarn">
+            <a class="purple-link" href="https://xiaofine.github.io//post/hello-gridea">
               <h3 class="post-title">
-                下一篇：Yarn
+                下一篇：Hello Gridea
               </h3>
             </a>
           </div>
