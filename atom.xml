@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://xiaofine.github.io/</id>
+    <id>https://xiaofine.github.io</id>
     <title>Gridea</title>
-    <updated>2019-06-16T07:46:12.106Z</updated>
+    <updated>2019-06-16T07:47:11.867Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://xiaofine.github.io/"/>
-    <link rel="self" href="https://xiaofine.github.io//atom.xml"/>
+    <link rel="alternate" href="https://xiaofine.github.io"/>
+    <link rel="self" href="https://xiaofine.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>https://xiaofine.github.io//images/avatar.png</logo>
-    <icon>https://xiaofine.github.io//favicon.ico</icon>
+    <logo>https://xiaofine.github.io/images/avatar.png</logo>
+    <icon>https://xiaofine.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
     <entry>
         <title type="html"><![CDATA[Spark Submit中添加多个jar]]></title>
-        <id>https://xiaofine.github.io//post/spark-submit-add-jar</id>
-        <link href="https://xiaofine.github.io//post/spark-submit-add-jar">
+        <id>https://xiaofine.github.io/post/spark-submit-add-jar</id>
+        <link href="https://xiaofine.github.io/post/spark-submit-add-jar">
         </link>
         <updated>2019-03-24T05:16:12.000Z</updated>
         <summary type="html"><![CDATA[<p>这次项目需要利用spark读取hbase，但在提交spark任务之后发现该集群没有为spark配置hbase相关的依赖，同时我们没有权限修改集群配置，因此只能通过spark submit时添加<code>--jar</code>参数来指定依赖。</p>
@@ -40,8 +40,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://xiaofine.github.io//post/hello-gridea</id>
-        <link href="https://xiaofine.github.io//post/hello-gridea">
+        <id>https://xiaofine.github.io/post/hello-gridea</id>
+        <link href="https://xiaofine.github.io/post/hello-gridea">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
@@ -72,8 +72,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Yarn]]></title>
-        <id>https://xiaofine.github.io//post/Yarn</id>
-        <link href="https://xiaofine.github.io//post/Yarn">
+        <id>https://xiaofine.github.io/post/Yarn</id>
+        <link href="https://xiaofine.github.io/post/Yarn">
         </link>
         <updated>2018-03-20T14:26:26.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="yarn-mrv1">Yarn MRv1</h4>
@@ -168,8 +168,8 @@ Spark支持在Yarn上运行，其分为Yarn-cluster模式和Yarn-client模式。
     </entry>
     <entry>
         <title type="html"><![CDATA[初始Hadoop]]></title>
-        <id>https://xiaofine.github.io//post/初始Hadoop</id>
-        <link href="https://xiaofine.github.io//post/初始Hadoop">
+        <id>https://xiaofine.github.io/post/初始Hadoop</id>
+        <link href="https://xiaofine.github.io/post/初始Hadoop">
         </link>
         <updated>2018-03-16T08:07:53.000Z</updated>
         <summary type="html"><![CDATA[<h3 id="hadoop简介">Hadoop简介</h3>
