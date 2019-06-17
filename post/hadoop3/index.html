@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560755485561">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560756028427">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -45,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1560755485561" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560756028427" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -118,8 +118,7 @@
               <p>在HDFS中，数据是以数据块（Block）的形式存储，不同版本Hadoop的默认块大小不同，128M或者64M。这个值可以用户自己定义。如果一个数据文件被划分成越小的数据块，HDFS读取这个文件时候的并发性也就更高。但是，也意味着将带来更多的磁盘寻道的IO开销，所以这是个trade-off。</p>
 <!--more-->
 <p>HDFS采用了冗余备份的策略，为每一个数据块都保存了多个复制（replicas）。默认replicas的大小为3份。下面展示了HDFS上数据的存储图：</p>
-<!-- ![](http://wx4.sinaimg.cn/large/afb7b7d8gy1g444m7um1ij20q00edmyb.jpg){:height="50%"} -->
-<img src="https://ws1.sinaimg.cn//afb7b7d8ly1g4463grwt3j20mk0640sw.jpg"  width = "400" alt="冗余备份" align=center />
+<img src="https://wx2.sinaimg.cn/large/afb7b7d8ly1g446ea7rpyj20q00edmyb.jpg"  width = "400" alt="冗余备份" align=center />
 <p>图中可以再次看到namenode上存储了文件到数据块的映射信息，比如文件part-0，有两个数据块1,3。每个数据块一共有两个复制，分别存储在不同的节点上。</p>
 <blockquote>
 <p>事实上，数据块的总数之间影响了MapReduce过程中，mapper的个数。</p>
@@ -257,6 +256,18 @@ fsDataOutputStream.close();
 </blockquote>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://xiaofine.github.io/tag/OHv4ussOU" class="tag">
+                    大数据
+                  </a>
+                
+                  <a href="https://xiaofine.github.io/tag/fx2F-vAtl" class="tag">
+                    Hadoop
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">

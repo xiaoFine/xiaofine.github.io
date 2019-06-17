@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560755485561">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560756028427">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -39,7 +39,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1560755485561" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560756028427" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,6 +105,22 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <h2 class="current-tag">标签: Hadoop</h2>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://xiaofine.github.io/post/hadoop3">
+                  <h2 class="post-title">初始Hadoop（三）：Hadoop读写</h2>
+                </a>
+                <div class="post-date">
+                  2018-03-18
+                </div>
+                <div class="post-abstract">
+                  <p>在HDFS中，数据是以数据块（Block）的形式存储，不同版本Hadoop的默认块大小不同，128M或者64M。这个值可以用户自己定义。如果一个数据文件被划分成越小的数据块，HDFS读取这个文件时候的并发性也就更高。但是，也意味着将带来更多的磁盘寻道的IO开销，所以这是个trade-off。</p>
+
+                </div>
+              </div>
+              
+            </article>
           
             <article class="post-item">
               <div class="left">
