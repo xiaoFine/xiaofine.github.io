@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560757049675">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560757234378">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -39,7 +39,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1560757049675" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560757234378" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -130,18 +130,15 @@
                   2018-03-20
                 </div>
                 <div class="post-abstract">
-                  <h4 id="yarn-mrv1">Yarn MRv1</h4>
-<p>Hadoop的MapReduce原有架构主要由以下几个组件组成：Client、JobTracker、TaskTracker、Task。其架构图如下所示：
-{%asset_img 20170808210130242.png%}
-从上图中可以清楚的看出原 MapReduce 程序的流程及设计思路：</p>
-<ol>
-<li>首先用户程序 (JobClient) 提交了一个 job，job 的信息会发送到 <strong>Job Tracker</strong> 中，Job Tracker 是 Map-reduce 框架的中心，他需要与集群中的机器定时通信 (heartbeat), 需要管理哪些程序应该跑在哪些机器上，需要管理所有 job 失败、重启等操作。</li>
-<li><strong>TaskTracker</strong> 是 Map-reduce 集群中每台机器都有的一个部分，他做的事情主要是监视自己所在机器的资源情况。</li>
-<li>TaskTracker 同时监视当前机器的 tasks 运行状况。TaskTracker 需要把这些信息通过 heartbeat 发送给 JobTracker，JobTracker 会搜集这些信息以给新提交的 job 分配运行在哪些机器上。上图虚线箭头就是表示消息的发送 - 接收的过程。</li>
-</ol>
+                  <p>Yarn是Hadoop集群的资源管理系统。Hadoop2.0对MapReduce框架做了彻底的设计重构，我们称Hadoop2.0中的MapReduce为MRv2或者Yarn。</p>
 
                 </div>
               </div>
+              
+                <a class="right" href="https://xiaofine.github.io/post/Yarn">
+                  <div class="feature-container" style="background-image: url('http://wx3.sinaimg.cn/large/afb7b7d8ly1g4471pd2u6j209g060t95.jpg')">
+                  </div>
+                </a>
               
             </article>
           
