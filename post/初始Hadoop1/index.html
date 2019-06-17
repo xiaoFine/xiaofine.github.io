@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>初始Hadoop（一）：Hadoop概览 | xiaoFine</title>
+<meta name="description" content="有六层楼那么高">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560754038375">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142181486-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-142181486-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://xiaofine.github.io">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560754038375" class="site-logo">
+        <h1 class="site-title">xiaoFine</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://xiaofine.github.io/" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      有六层楼那么高
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://xiaofine.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">初始Hadoop（一）：Hadoop概览</h2>
+            <div class="post-date">2018-03-16</div>
+            
+              <div class="feature-container" style="background-image: url('http://wx1.sinaimg.cn/large/afb7b7d8ly1g443esmmekj20j6073wfd.jpg')">
+              </div>
+            
+            <div class="post-content">
+              <p>Hadoop是一个于2011年，由Apache基金会所开发的分布式系统基础架构。它为我们提供了一个可靠的，可扩展的分布式计算框架。总的来说，Hadoop由四部分组成，包括:</p>
+<!--more-->
+<ol>
+<li>分布式计算框架MapReduce</li>
+<li>分布式文件系统HDFS</li>
+<li>作业调度和资源管理服务YARN</li>
+<li>用于支持外部组件的公用调用服务Hadoop Common</li>
+</ol>
+<p>就分布式计算框架而言可以分为 <strong>模型并行(Model Parallelism)</strong> ， <strong>数据并行(Data Parallelism)</strong> 和 <strong>两者的混合(Irregular Parallelism)</strong> 。模型并行化是将模型划分成子模型，分布到各个节点上（比如将线性模型参数W根据feature进行划分）；数据并行是将数据划分到不同节点上，而计算模型本身不会进行划分。
+<img src="https://wx1.sinaimg.cn/large/afb7b7d8ly1g443krs37xj20jo09xwfn.jpg" width="400" alt="数据并行与模型并行" align=center /></p>
+<!-- ![数据并行与模型并行](https://wx1.sinaimg.cn/large/afb7b7d8ly1g443krs37xj20jo09xwfn.jpg) -->
+<img src="https://ws1.sinaimg.cn/large/afb7b7d8ly1g443ml6jnij20in0590tu.jpg" width=400 alt="混合架构" align=center />
+<!-- ![混合架构](https://ws1.sinaimg.cn/large/afb7b7d8ly1g443ml6jnij20in0590tu.jpg) -->
+<p>根据算法迭代方法的不同，现有的分布式计算框架可以划分为 <strong>基于同步(Synchronization-based)</strong> 的和 <strong>基于异步的(Asynchronization-based)</strong>。两者的不同在于是否等待所有节点完成计算/任务，然后在进入下一次迭代/任务。</p>
+<p>对于Hadoop框架来说，Hadoop是一个 <strong>基于同步和数据并行(Synchronization-based and Data-distributed)的计算框架</strong>。Hadoop是建立在HDFS之上，数据本身已经进行了分布式存储与各个节点上，所以Hadoop的MapReduce计算任务会将整个计算模型/程序发送到各个节点上运行。这暗示着Hadoop不可避免的会涉及到数据在不同节点上的调度，同时带来巨大的IO开销。并且也暗示了MapReduce计算框架不能应用于数据之间有依赖的情况。因为HDFS上的数据是基于IID划分的。</p>
+<p>另一方面，对于每一次MapReduce任务迭代，MapReduce总是等到所有节点都完成了Map操作之后，再进行Reduce操作。当某个节点执行任务特别慢的时候，整个集群会陷入等待状态。考虑到这个问题Hadoop也做了相应的处理。比如当一定比例的节点完成Map任务的时候，就可以进入Reduce阶段，而不在等待；当然也在从任务调度的层面监控作业进度，将某个节点上执行缓慢的任务放在别的节点上执行。</p>
+<p>即便Hadoop本身有一些不足，但是也不影响Hadoop的优势：</p>
+<ul>
+<li>Low cost，搭建Hadoop的成本是很小的，它能利用每一个臭皮匠</li>
+<li>Scalability，多个臭皮匠，顶很多诸葛亮</li>
+<li>Reliability and Fault Tolerance，Hadoop本身提供很多的容错机制，保证集群的可靠性。包括HDFS层面的冗余备份，HA机制对节点宕机的容错，YARN机制对作业调度的容错支持等等。</li>
+<li>Efficiency，分布式计算的优势</li>
+<li>Throughput，支持很大的吞吐量，支持一写多读</li>
+</ul>
+<p>当然，Hadoop也有不能处理的场景</p>
+<ul>
+<li>小数据与大量小文件。由于HDFS上数据是以块(Block)进行存储的，不足块大小的文件同样会占用一个块的大小。如果小文件太多，会占用NameNode过多的内存来维护元数据信息。</li>
+<li>修改文件的值。HDFS不提供Value-level的数据修改，只能覆写或者追加</li>
+<li>流式作业和低延时场景。Hadoop MapReduce是操作HDFS上的数据，所以流式数据到来之后，会涉及到在HDFS上的转存操作，然后再是读取数据，交于MapReduce计算。并且MapReduce计算框架本身也会涉及到一些数据溢写的IO操作。因此实时性要求强的场景下，Hadoop并不具有优势</li>
+<li>MapReduce多次迭代。Hadoop对于MapReduce的迭代任务的支持并不友好，需要手动构建多个MapReduce Job。对于众多机器学习算法，算法的迭代是难以避免的。这时候Hadoop不是一个很好的选择</li>
+<li>基于图的并行计算（Graph parallel computing）。Hadoop是基于数据并行的计算框架，底层HDFS进行数据分布式储存的时候，并没有考虑数据之间的联系，反倒是假设了数据是IID的。因此对于图数据，Hadoop也是不适合的。</li>
+</ul>
+<blockquote>
+<p>原文出自HF和HC，本文做了部分修改和整理</p>
+</blockquote>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://xiaofine.github.io/tag/OHv4ussOU" class="tag">
+                    大数据
+                  </a>
+                
+                  <a href="https://xiaofine.github.io/tag/fx2F-vAtl" class="tag">
+                    Hadoop
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '7b80890ef0a536f3d053',
+        clientSecret: 'c6261dccf025200fb3ea1d9e5db9d7be9e073f3a',
+        repo: 'xiaofine.github.io',
+        owner: 'xiaoFine',
+        admin: ['xiaoFine'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

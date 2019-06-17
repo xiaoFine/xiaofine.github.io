@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>初始Hadoop（三）：Hadoop读写 | xiaoFine</title>
+<meta name="description" content="有六层楼那么高">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560754038375">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142181486-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-142181486-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://xiaofine.github.io">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560754038375" class="site-logo">
+        <h1 class="site-title">xiaoFine</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://xiaofine.github.io/" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      有六层楼那么高
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://xiaofine.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">初始Hadoop（三）：Hadoop读写</h2>
+            <div class="post-date">2018-03-18</div>
+            
+            <div class="post-content">
+              <p>在HDFS中，数据是以数据块（Block）的形式存储，不同版本Hadoop的默认块大小不同，128M或者64M。这个值可以用户自己定义。如果一个数据文件被划分成越小的数据块，HDFS读取这个文件时候的并发性也就更高。但是，也意味着将带来更多的磁盘寻道的IO开销，所以这是个trade-off。</p>
+<!--more-->
+<p>HDFS采用了冗余备份的策略，为每一个数据块都保存了多个复制（replicas）。默认replicas的大小为3份。下面展示了HDFS上数据的存储图：</p>
+<!-- ![](http://wx4.sinaimg.cn/large/afb7b7d8gy1g444m7um1ij20q00edmyb.jpg){:height="50%"} -->
+<img src="http://wx4.sinaimg.cn/large/afb7b7d8gy1g444m7um1ij20q00edmyb.jpg"  width = "400" alt="冗余备份" align=center />
+<p>图中可以再次看到namenode上存储了文件到数据块的映射信息，比如文件part-0，有两个数据块1,3。每个数据块一共有两个复制，分别存储在不同的节点上。</p>
+<blockquote>
+<p>事实上，数据块的总数之间影响了MapReduce过程中，mapper的个数。</p>
+</blockquote>
+<p>大文件被划分成了很多的block，而不足block大小的文件（比如一个只有1k的文件），同样占用了一个block。</p>
+<p>HDFS对文件的划分存储并没有考虑到文件的结构信息。这时候，HDFS引入了InputSplit，InputSplit由用户在读取HDFS数据的时候指定，它保证了一个文件的逻辑划分。比如，下图是一个由4条记录组成的文件，每条记录100M。</p>
+<img src="http://wx1.sinaimg.cn/large/afb7b7d8gy1g444n9q3tjj20mk0640sw.jpg" width = "400" alt="inputsplit" align=center />
+<p>这时候，启动一个mapper来解析任何一个Block都不能都到正确的结果，比较record的结构已经被破坏。为了处理这里问题，我们需要指定一个InputSplit来读取数据，给出每一条record在逻辑上的划分。</p>
+<blockquote>
+<p>普通文本文件当然可以不用设置InputSplit。</p>
+</blockquote>
+<img src="https://wx2.sinaimg.cn/large/afb7b7d8ly1g44520pushj20ns09q3ys.jpg" width="400" alt="inputsplit2" align=center />
+<p>具体来说，需要在设置Job的时候，调用<code>job.setInputFormatClass</code>(<code>WholeFileInputFormat.class</code>)来指定自己实现的InputSplit格式。这里的<code>WholeFileInputFormat.class</code>是自己实现的类，用来指定split，它需要继承FileInputFormat类（当然选择TextInputFormat，SequenceFileInputFormat等等类来集成也是可以的，具体场景，具体分析），覆写<code>createRecordReader</code>和<code>isSplitable</code>方法。同时还要指定自己的<code>RecordReader</code>。下面是一个HF写的小栗子，用于解析一个二进制文件。</p>
+<pre><code>public class WholeFileInputFormat extends FileInputFormat&lt;Text, BytesWritable&gt; {
+    @Override
+    public RecordReader&lt;Text, BytesWritable&gt; createRecordReader(
+            InputSplit split, TaskAttemptContext context) throws IOException,
+            InterruptedException {
+      //这个类告诉程序要怎么去读文件，找出正确的input划分
+        WholeFileRecordReader recordReader = new WholeFileRecordReader();  
+        recordReader.initialize(split,context);
+        return recordReader;
+    }
+    @Override
+    protected boolean isSplitable(JobContext context, Path filename) {
+        return false;
+    }
+}
+ 
+public class WholeFileRecordReader extends RecordReader&lt;Text, BytesWritable&gt; {
+    private FileSplit fileSplit;
+    private FSDataInputStream fin;
+    private Text key = new Text();
+    private BytesWritable value = new BytesWritable();
+    private boolean processed = false;
+    private Configuration conf;
+    private String fileName;
+    private int count=0;
+    @Override
+    public void initialize(InputSplit inputSplit, TaskAttemptContext context)
+            throws IOException, InterruptedException {
+        //这里整一些初始化的工作
+    }
+    @Override
+    public boolean nextKeyValue() {
+        // 这个方法里需要实现具体这么解析一条一条的记录，然后将读取结果设置到key和value里
+        // 期间，有任何解析问题就返回false，否则返回true
+        value = new BytesWritable(info);
+         key.set(count+&quot;&quot;);
+         return true;
+    }
+    
+    @Override
+    public float getProgress() throws IOException, InterruptedException {
+        // TODO Auto-generated method stub
+        return processed? fileSplit.getLength():0;
+    }
+    @Override
+    public void close() throws IOException {
+        // TODO Auto-generated method stub
+        //fis.close();
+    }
+    @Override
+    public Text getCurrentKey() throws IOException, InterruptedException {
+        // TODO Auto-generated method stub
+        return this.key;
+    }
+    @Override
+    public BytesWritable getCurrentValue() throws IOException,
+            InterruptedException {
+        // TODO Auto-generated method stub
+        return this.value;
+    }
+}
+</code></pre>
+<p>在了解了数据是怎么存储了之后，我们再来了解下客户端是如何读写数据的。</p>
+<h4 id="读数据">读数据</h4>
+<p>由于namenode上存储了datanode和数据块的路径地址，所以，客户端实际读取数据之前，需要访问namenode获取相关信息。而namenode会计算最佳读取的块，然后返回其位置信息给客户端。最后客户端需要根据返回的信息，自己去找datanode读取数据。流程如下图所示。</p>
+<!-- {%asset_img 微信图片_20180725155109.jpg %} -->
+<img src="https://wx1.sinaimg.cn/large/afb7b7d8ly1g445fgql70j20tk0hzgms.jpg" width=400 alt="writeHadoop" align=center />
+<p>幸运的是，客户端具体的程序调用，已经屏蔽了读取数据的细节：</p>
+<pre><code>Configuration configuration = new Configuration();
+String dataPath = &quot;hdfs://localhost:9000/dml&quot;;
+FileSystem fileSystem = FileSystem.get(URI.create(dataPath), configuration);
+FSDataInputStream fsDataInputStream = fileSystem.open(new Path(dataPath));
+BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fsDataInputStream));
+String line = bufferedReader.readLine();
+while(line != null){
+    System.out.println(line);
+    line = bufferedReader.readLine();
+}
+bufferedReader.close();
+fsDataInputStream.close();
+fileSystem.close();
+</code></pre>
+<ol>
+<li>客户端(client)用FileSystem的open()函数打开文件</li>
+<li>DistributedFileSystem用RPC调用namenode，得到文件的数据块信息。对于每一个数据块，namenode节点返回保存数据块的数据节点的地址。DistributedFileSystem返回FSDataInputStream给客户端，用来读取数据。</li>
+<li>客户端调用stream的read()函数开始读取数据。</li>
+<li><strong>DFSInputStream</strong> 连接保存此文件第一个数据块的最近的数据节点。Data从数据节点读到客户端(client).
+当此数据块读取完毕时，DFSInputStream关闭和此数据节点的连接，然后连接此文件下一个数据块的最近的数据节点。</li>
+<li>当客户端读取完毕数据的时候，调用FSDataInputStream的close函数。在读取数据的过程中，如果客户端在与数据节点通信出现错误，则尝试连接包含此数据块的下一个数据节点。失败的数据节点将被记录，以后不再连接。</li>
+</ol>
+<h4 id="写数据">写数据</h4>
+<p>客户端写数据的流程如下所示：</p>
+<!-- ![ReadData](/微信图片_20180725160449.jpg) -->
+<img src="https://ws2.sinaimg.cn/large/afb7b7d8ly1g445goyj01j20t40hqq45.jpg" width=400 alt="readHadoop" align=center />
+<p>同样，程序实现：</p>
+<pre><code>Configuration configuration = new Configuration();
+String dst = &quot;hdfs://localhost:9000/dml&quot;;
+String data = &quot;data mining lab data mining lab,data mining lab&quot;;
+FileSystem fileSystem = FileSystem.get(URI.create(dst), configuration);
+Path path = new Path(dst);
+FSDataOutputStream fsDataOutputStream = fileSystem.create(path);
+fsDataOutputStream.write(data.getBytes());
+fsDataOutputStream.flush();
+fsDataOutputStream.close();
+</code></pre>
+<ol>
+<li>客户端调用create()来创建文件</li>
+<li>DistributedFileSystem用RPC调用元数据节点，在文件系统的命名空间中创建一个新的文件。元数据节点首先确定文件原来不存在，并且客户端有创建文件的权限，然后创建新文件。DistributedFileSystem返回DFSOutputStream，客户端用于写数据。</li>
+</ol>
+<blockquote>
+<p>RPC(Remote Procedure Call)：一种通信协议，该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。如果涉及的软件采用面向对象编程，那么远程过程调用亦可称作远程调用或远程方法调用</p>
+</blockquote>
+<ol start="3">
+<li>客户端开始写入数据，DFSOutputStream将数据分成块，写入data queue。</li>
+<li>Data queue由Data Streamer读取，并通知元数据节点分配数据节点，用来存储数据块(每块默认复制3块)。分配的数据节点放在一个pipeline里。</li>
+<li>Data Streamer将数据块写入pipeline中的第一个数据节点。第一个数据节点将数据块发送给第二个数据节点。第二个数据节点将数据发送给第三个数据节点。DFSOutputStream为发出去的数据块保存了ack queue，等待pipeline中的数据节点告知数据已经写入成功。如果数据节点在写入的过程中失败：关闭pipeline，将ack queue中的数据块放入data queue的开始。当前的数据块在已经写入的数据节点中被元数据节点赋予新的标示，则错误节点重启后能够察觉其数据块是过时的，然后会被删除。失败的数据节点从pipeline中移除，另外的数据块，则写入pipeline中的另外两个数据节点。元数据节点则被通知此数据块是复制块数不足，将来会再创建第三份备份。</li>
+<li>当客户端结束写入数据，则调用stream的close函数。</li>
+<li>此操作将所有的数据块写入pipeline中的数据节点，并等待ack queue返回成功。最后通知元数据节点写入完毕。</li>
+</ol>
+<blockquote>
+<p>原文出自HF和HC，本文做了部分修改和整理</p>
+</blockquote>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://xiaofine.github.io/post/chu-shi-hadooper-hadoop-jia-gou">
+                  <h3 class="post-title">
+                    初始Hadoop（二）：Hadoop架构
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '7b80890ef0a536f3d053',
+        clientSecret: 'c6261dccf025200fb3ea1d9e5db9d7be9e073f3a',
+        repo: 'xiaofine.github.io',
+        owner: 'xiaoFine',
+        admin: ['xiaoFine'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
