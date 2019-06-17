@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560754038375">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560754670501">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -45,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1560754038375" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560754670501" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -199,7 +199,7 @@ public class WholeFileRecordReader extends RecordReader&lt;Text, BytesWritable&g
 <h4 id="读数据">读数据</h4>
 <p>由于namenode上存储了datanode和数据块的路径地址，所以，客户端实际读取数据之前，需要访问namenode获取相关信息。而namenode会计算最佳读取的块，然后返回其位置信息给客户端。最后客户端需要根据返回的信息，自己去找datanode读取数据。流程如下图所示。</p>
 <!-- {%asset_img 微信图片_20180725155109.jpg %} -->
-<img src="https://wx1.sinaimg.cn/large/afb7b7d8ly1g445fgql70j20tk0hzgms.jpg" width=400 alt="writeHadoop" align=center />
+<img src="https://wx3.sinaimg.cn/large/afb7b7d8ly1g445fgql70j20tk0hzgms.jpg" width=400 alt="writeHadoop" align=center />
 <p>幸运的是，客户端具体的程序调用，已经屏蔽了读取数据的细节：</p>
 <pre><code>Configuration configuration = new Configuration();
 String dataPath = &quot;hdfs://localhost:9000/dml&quot;;

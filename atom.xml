@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xiaofine.github.io</id>
     <title>xiaoFine</title>
-    <updated>2019-06-17T06:49:34.773Z</updated>
+    <updated>2019-06-17T06:57:52.734Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xiaofine.github.io"/>
     <link rel="self" href="https://xiaofine.github.io/atom.xml"/>
@@ -22,7 +22,7 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Yarn]]></title>
+        <title type="html"><![CDATA[初始Yarn]]></title>
         <id>https://xiaofine.github.io/post/Yarn</id>
         <link href="https://xiaofine.github.io/post/Yarn">
         </link>
