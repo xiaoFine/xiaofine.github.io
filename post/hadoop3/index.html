@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560754781141">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1560755097556">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -45,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1560754781141" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1560755097556" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -119,14 +119,14 @@
 <!--more-->
 <p>HDFS采用了冗余备份的策略，为每一个数据块都保存了多个复制（replicas）。默认replicas的大小为3份。下面展示了HDFS上数据的存储图：</p>
 <!-- ![](http://wx4.sinaimg.cn/large/afb7b7d8gy1g444m7um1ij20q00edmyb.jpg){:height="50%"} -->
-<img src="https://wx4.sinaimg.cn/large/afb7b7d8gy1g444m7um1ij20q00edmyb.jpg"  width = "400" alt="冗余备份" align=center />
+<img src="https://wx4.sinaimg.cn/large/afb7b7d8ly1g445zv8opij20q00edmyb.jpg"  width = "400" alt="冗余备份" align=center />
 <p>图中可以再次看到namenode上存储了文件到数据块的映射信息，比如文件part-0，有两个数据块1,3。每个数据块一共有两个复制，分别存储在不同的节点上。</p>
 <blockquote>
 <p>事实上，数据块的总数之间影响了MapReduce过程中，mapper的个数。</p>
 </blockquote>
 <p>大文件被划分成了很多的block，而不足block大小的文件（比如一个只有1k的文件），同样占用了一个block。</p>
 <p>HDFS对文件的划分存储并没有考虑到文件的结构信息。这时候，HDFS引入了InputSplit，InputSplit由用户在读取HDFS数据的时候指定，它保证了一个文件的逻辑划分。比如，下图是一个由4条记录组成的文件，每条记录100M。</p>
-<img src="https://wx1.sinaimg.cn/large/afb7b7d8gy1g444n9q3tjj20mk0640sw.jpg" width = "400" alt="inputsplit" align=center />
+<img src="https://wx2.sinaimg.cn/large/afb7b7d8ly1g44612d0pjj20mk0640sw.jpg" width = "400" alt="inputsplit" align=center />
 <p>这时候，启动一个mapper来解析任何一个Block都不能都到正确的结果，比较record的结构已经被破坏。为了处理这里问题，我们需要指定一个InputSplit来读取数据，给出每一条record在逻辑上的划分。</p>
 <blockquote>
 <p>普通文本文件当然可以不用设置InputSplit。</p>
