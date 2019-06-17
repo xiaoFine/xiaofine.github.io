@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>xiaoFine</title>
+<title>大数据 | xiaoFine</title>
 <meta name="description" content="有六层楼那么高">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,46 +104,7 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://xiaofine.github.io/post/spark-submit-add-jar">
-                  <h2 class="post-title">Spark Submit中添加多个jar</h2>
-                </a>
-                <div class="post-date">
-                  2019-03-24
-                </div>
-                <div class="post-abstract">
-                  <p>这次项目需要利用spark读取hbase，但在提交spark任务之后发现该集群没有为spark配置hbase相关的依赖，同时我们没有权限修改集群配置，因此只能通过spark submit时添加<code>--jar</code>参数来指定依赖。</p>
-
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://xiaofine.github.io/post/Yarn">
-                  <h2 class="post-title">Yarn</h2>
-                </a>
-                <div class="post-date">
-                  2018-03-20
-                </div>
-                <div class="post-abstract">
-                  <h4 id="yarn-mrv1">Yarn MRv1</h4>
-<p>Hadoop的MapReduce原有架构主要由以下几个组件组成：Client、JobTracker、TaskTracker、Task。其架构图如下所示：
-{%asset_img 20170808210130242.png%}
-从上图中可以清楚的看出原 MapReduce 程序的流程及设计思路：</p>
-<ol>
-<li>首先用户程序 (JobClient) 提交了一个 job，job 的信息会发送到 <strong>Job Tracker</strong> 中，Job Tracker 是 Map-reduce 框架的中心，他需要与集群中的机器定时通信 (heartbeat), 需要管理哪些程序应该跑在哪些机器上，需要管理所有 job 失败、重启等操作。</li>
-<li><strong>TaskTracker</strong> 是 Map-reduce 集群中每台机器都有的一个部分，他做的事情主要是监视自己所在机器的资源情况。</li>
-<li>TaskTracker 同时监视当前机器的 tasks 运行状况。TaskTracker 需要把这些信息通过 heartbeat 发送给 JobTracker，JobTracker 会搜集这些信息以给新提交的 job 分配运行在哪些机器上。上图虚线箭头就是表示消息的发送 - 接收的过程。</li>
-</ol>
-
-                </div>
-              </div>
-              
-            </article>
+          <h2 class="current-tag">标签: 大数据</h2>
           
             <article class="post-item">
               <div class="left">
