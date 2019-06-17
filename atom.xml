@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xiaofine.github.io</id>
     <title>xiaoFine</title>
-    <updated>2019-06-17T06:59:01.994Z</updated>
+    <updated>2019-06-17T06:59:42.694Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xiaofine.github.io"/>
     <link rel="self" href="https://xiaofine.github.io/atom.xml"/>
@@ -50,8 +50,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[初始Hadoop（三）：Hadoop读写]]></title>
-        <id>https://xiaofine.github.io/post/chu-shi-hadoopsan-hadoop-du-xie</id>
-        <link href="https://xiaofine.github.io/post/chu-shi-hadoopsan-hadoop-du-xie">
+        <id>https://xiaofine.github.io/post/hadoop3</id>
+        <link href="https://xiaofine.github.io/post/hadoop3">
         </link>
         <updated>2018-03-18T07:27:42.000Z</updated>
         <summary type="html"><![CDATA[<p>在HDFS中，数据是以数据块（Block）的形式存储，不同版本Hadoop的默认块大小不同，128M或者64M。这个值可以用户自己定义。如果一个数据文件被划分成越小的数据块，HDFS读取这个文件时候的并发性也就更高。但是，也意味着将带来更多的磁盘寻道的IO开销，所以这是个trade-off。</p>
@@ -61,8 +61,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[初始Hadoop（二）：Hadoop架构]]></title>
-        <id>https://xiaofine.github.io/post/chu-shi-hadooper-hadoop-jia-gou</id>
-        <link href="https://xiaofine.github.io/post/chu-shi-hadooper-hadoop-jia-gou">
+        <id>https://xiaofine.github.io/post/hadoop2</id>
+        <link href="https://xiaofine.github.io/post/hadoop2">
         </link>
         <updated>2018-03-17T05:45:42.000Z</updated>
         <summary type="html"><![CDATA[<p>HDFS是Hadoop Distributed File System的缩写，它采用了主从式的结构。根据节点角色的不同，可以主要分为 <strong>NameNode</strong> 和 <strong>DataNode</strong> （细分还包括Second Namenode，JournalNode等等）。</p>
@@ -72,8 +72,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[初始Hadoop（一）：Hadoop概览]]></title>
-        <id>https://xiaofine.github.io/post/初始Hadoop1</id>
-        <link href="https://xiaofine.github.io/post/初始Hadoop1">
+        <id>https://xiaofine.github.io/post/Hadoop1</id>
+        <link href="https://xiaofine.github.io/post/Hadoop1">
         </link>
         <updated>2018-03-16T08:07:53.000Z</updated>
         <summary type="html"><![CDATA[<p>Hadoop是一个于2011年，由Apache基金会所开发的分布式系统基础架构。它为我们提供了一个可靠的，可扩展的分布式计算框架。总的来说，Hadoop由四部分组成，包括:</p>
