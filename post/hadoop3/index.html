@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1580199229103">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1581044178567">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -45,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1580199229103" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1581044178567" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -218,7 +218,7 @@ fileSystem.close();
 <li>客户端(client)用FileSystem的open()函数打开文件</li>
 <li>DistributedFileSystem用RPC调用namenode，得到文件的数据块信息。对于每一个数据块，namenode节点返回保存数据块的数据节点的地址。DistributedFileSystem返回FSDataInputStream给客户端，用来读取数据。</li>
 <li>客户端调用stream的read()函数开始读取数据。</li>
-<li><strong>DFSInputStream</strong> 连接保存此文件第一个数据块的最近的数据节点。Data从数据节点读到客户端(client).
+<li><strong>DFSInputStream</strong> 连接保存此文件第一个数据块的最近的数据节点。Data从数据节点读到客户端(client).<br>
 当此数据块读取完毕时，DFSInputStream关闭和此数据节点的连接，然后连接此文件下一个数据块的最近的数据节点。</li>
 <li>当客户端读取完毕数据的时候，调用FSDataInputStream的close函数。在读取数据的过程中，如果客户端在与数据节点通信出现错误，则尝试连接包含此数据块的下一个数据节点。失败的数据节点将被记录，以后不再连接。</li>
 </ol>

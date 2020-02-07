@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1580199229103">
+<link rel="shortcut icon" href="https://xiaofine.github.io/favicon.ico?v=1581044178567">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://xiaofine.github.io/styles/main.css">
 
@@ -45,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://xiaofine.github.io">
-        <img src="https://xiaofine.github.io/images/avatar.png?v=1580199229103" class="site-logo">
+        <img src="https://xiaofine.github.io/images/avatar.png?v=1581044178567" class="site-logo">
         <h1 class="site-title">xiaoFine</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,7 +117,7 @@
             <div class="post-content">
               <p>HDFS是Hadoop Distributed File System的缩写，它采用了主从式的结构。根据节点角色的不同，可以主要分为 <strong>NameNode</strong> 和 <strong>DataNode</strong> （细分还包括Second Namenode，JournalNode等等）。</p>
 <!--more-->
-<p>下图是HDFS的粗略框架:
+<p>下图是HDFS的粗略框架:<br>
 <img src="https://ws3.sinaimg.cn/large/afb7b7d8ly1g443u5rtnpj20u00hwgmx.jpg" width="400" alt="HDFS混合架构" align=center /></p>
 <!-- ![HDFS框架](https://ws3.sinaimg.cn/large/afb7b7d8ly1g443u5rtnpj20u00hwgmx.jpg) -->
 <p>其中</p>
@@ -128,11 +128,11 @@
 </ul>
 <p>为了保证整个班级的正常次序，班长需要定期的点名，检查是否有童鞋上课睡觉。这里的namenode并不会主动点名，而是让各个datanode主动汇报，定期的给namenode发送信息。信息包括两部分，<strong>心跳检测（HeartBeat）</strong> 和 <strong>数据块汇报信息（BlockReport）</strong>。前者告诉namenode，datanode还活着；后者是该datanode上数据块的信息。</p>
 <p>如果HeartBeat和BlockReport被namenode收到了namenode会汇总大家的blockreport，检测文件的数据块是否有丢失，数据块的复制数是否达到要求。如果没有达到要求，集群会进入 <strong>Safe Mode</strong>。如果namenode超过10min还没有收到某个datanode的HeartBeat，namenode会将这个datanode标记为挂了，然后将原本存储在这个datanode上的数据块，重新复制到其他节点上，并且以后的计算任务也不会再发送给这个datanode了。</p>
-<p>当然，班长namenode也可能会挂掉。一旦班长挂了，整个班级都约等于挂了。为了防止这个情况，允许集群的更好的容错能力，Hadoop 1.X启动了副班长策略，引入了 <strong>Second Namenode</strong>。Second namenode负责FsImage和EditLog两个文件的合并，减轻namenode的负担（如下图）。
+<p>当然，班长namenode也可能会挂掉。一旦班长挂了，整个班级都约等于挂了。为了防止这个情况，允许集群的更好的容错能力，Hadoop 1.X启动了副班长策略，引入了 <strong>Second Namenode</strong>。Second namenode负责FsImage和EditLog两个文件的合并，减轻namenode的负担（如下图）。<br>
 <img src="https://ws1.sinaimg.cn/large/afb7b7d8ly1g4440ab1g0j20jk0dumxq.jpg" width="400" alt="Second Nodes" align=center /></p>
 <!-- ![SN](https://ws1.sinaimg.cn/large/afb7b7d8ly1g4440ab1g0j20jk0dumxq.jpg) -->
 <p>当namenode挂掉了，second namenode上会保存有最新的FsImage文件。那么集群管理员就可以将这份FsImage拷贝到namenode上，然后人工重启namenode。所以second namenode不提供namenode的故障处理，它仅仅是减轻namenode的压力而已。</p>
-<p>要达到故障处理的要求，Hadoop 2.X之后提供了 <strong>Hadoop HA策略</strong>（High Availability高可用）。但是，注意，<strong>HA和second namenode策略不能同时使用</strong>。Hadoop HA的框架图如下：
+<p>要达到故障处理的要求，Hadoop 2.X之后提供了 <strong>Hadoop HA策略</strong>（High Availability高可用）。但是，注意，<strong>HA和second namenode策略不能同时使用</strong>。Hadoop HA的框架图如下：<br>
 <img src="https://ws3.sinaimg.cn/large/afb7b7d8ly1g4441nyw4kj20fo0ah0t5.jpg" width="400" alt="HA" align=center /></p>
 <!-- ![HA](https://ws3.sinaimg.cn/large/afb7b7d8ly1g4441nyw4kj20fo0ah0t5.jpg) -->
 <p>Hadoop HA引入了两个Namenode，即 <strong>Active Namename</strong> 和 <strong>Standby Namenode</strong>。但是只有一个提供集群服务，而另一个就standby。一旦active namenode挂了，standby的就立刻上线。至于一开始，哪个namenode充当active的，取决于Zookeeper。Zookeeper提供master选举的作用，这个选举实际上是一个抢占式的锁机制，两个namenode谁先到谁就是active的。</p>
